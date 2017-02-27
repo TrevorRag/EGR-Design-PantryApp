@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pantry</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="passwrd">Password</string>
+    <string name="sign_up">Register</string>
+</resources>
