@@ -2,6 +2,15 @@
     <string name="app_name">Pantry</string>
     <string name="username">Username</string>
     <string name="login">Login</string>
-    <string name="passwrd">Password</string>
+    <string name="password">Password</string>
     <string name="sign_up">Register</string>
+
+    <string name="progress_dialog_loading">Loading</string>
+    <string name="progress_dialog_creating_user_with_firebase">Creating user with Firebase</string>
+    <string name="log_message_auth_successful">Registration successful</string>
+    <string name="log_error_occurred">An error has occurred</string>
+    <string name="error_email_taken">That email is taken</string>
+    <string name="error_invalid_email_not_valid">%s is not a valid email</string>
+    <string name="error_cannot_be_empty">Username cannot be empty</string>
+    <string name="error_invalid_password_no_valid">The password must be at least 6 characters</string>
 </resources>
