@@ -100,12 +100,18 @@
     <Button
         android:text="Login"
         android:onClick="signIn"
+        android:layout_width="175sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword"
+        android:id="@+id/bLogin" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/login_with_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
-        android:layout_alignParentStart="true"
-        android:id="@+id/bLogin"
-        android:layout_alignParentEnd="true" />
+        android:layout_toEndOf="@+id/bLogin"
+        android:layout_alignParentEnd="true"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -125,6 +131,6 @@
         android:layout_marginTop="20dp"
         android:id="@+id/tvRegister"
         android:textAlignment="center"
-        android:layout_below="@+id/bLogin"
+        android:layout_below="@+id/login_with_google"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

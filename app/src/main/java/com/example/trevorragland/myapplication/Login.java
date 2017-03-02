@@ -11,15 +11,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Login extends AppCompatActivity {
+
+public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private String mUserName, mPassword;
     private static final String LOG_TAG = Login.class.getSimpleName();
     private FirebaseAuth mAuth;
+    private GoogleApiClient mGoogleApiClient;
+    public static final int RC_SIGN_IN = 9001;
 
     EditText etUsername;
     EditText etPassword;
@@ -31,7 +40,6 @@ public class Login extends AppCompatActivity {
 
         etUsername = (EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
-        final Button bLogin = (Button) findViewById(R.id.bLogin);
         final TextView registerLink = (TextView) findViewById(R.id.tvRegister);
 
         registerLink.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +53,24 @@ public class Login extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+        findViewById(R.id.login_with_google).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.login_with_google:
+                        googleSignIn();
+                        break;
+                }
+            }
+        });
+    }
+
+    public void googleSignIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     public void signIn(View view) {
         mUserName = etUsername.getText().toString().toLowerCase();
@@ -88,5 +114,43 @@ public class Login extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);// Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            updateUI(true);
+            Intent profileIntent = new Intent(Login.this, Profile.class);
+            startActivity(profileIntent);
+            finish();
+        } else {        // Signed out, show unauthenticated UI.
+            updateUI(false);
+        }
+    }
+    private void updateUI(boolean signedIn) {
+        if (signedIn) {
+            findViewById(R.id.login_with_google).setVisibility(View.GONE);
+            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+        } else {
+            //mStatusTextView.setText(R.string.signed_out);
+            findViewById(R.id.login_with_google).setVisibility(View.VISIBLE);
+            // findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(LOG_TAG, "onConnectionFailed:" + connectionResult);
     }
 }

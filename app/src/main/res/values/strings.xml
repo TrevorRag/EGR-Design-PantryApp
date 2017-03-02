@@ -13,4 +13,5 @@
     <string name="error_invalid_email_not_valid">%s is not a valid email</string>
     <string name="error_cannot_be_empty">Username cannot be empty</string>
     <string name="error_invalid_password_no_valid">The password must be at least 6 characters</string>
+    <string name="signed_in_fmt">Welcome %s</string>
 </resources>
