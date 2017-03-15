@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private String mUserName, mPassword;
+    private String mUserEmail, mPassword;
     private static final String LOG_TAG = Login.class.getSimpleName();
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
@@ -73,14 +73,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     public void signIn(View view) {
-        mUserName = etUsername.getText().toString().toLowerCase();
+        mUserEmail = etUsername.getText().toString().toLowerCase();
         mPassword = etPassword.getText().toString();
 
-        boolean validUserName = isUserNameValid(mUserName);
+        boolean validUserName = isUserNameValid(mUserEmail);
         boolean validPassword = isPasswordValid(mPassword);
         if (!validUserName || !validPassword) return;
 
-        mAuth.signInWithEmailAndPassword(mUserName, mPassword)
+        mAuth.signInWithEmailAndPassword(mUserEmail, mPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -152,5 +152,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d(LOG_TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    public static String encodeEmail(String userEmail) {
+        return userEmail.replace(".", ",");
     }
 }

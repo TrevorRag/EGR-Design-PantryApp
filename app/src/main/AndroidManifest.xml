@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Registration" />
+        <activity android:name=".pictureUpload" />
         <activity android:name=".Profile"></activity>
     </application>
 

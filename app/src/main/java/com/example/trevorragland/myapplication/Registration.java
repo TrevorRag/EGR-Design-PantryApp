@@ -13,15 +13,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.trevorragland.myapplication.POJO.User;
 import com.example.trevorragland.myapplication.utils.Constants;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Registration extends AppCompatActivity {
@@ -30,6 +34,7 @@ public class Registration extends AppCompatActivity {
     private static final String LOG_TAG = Registration.class.getSimpleName();
     private ProgressDialog mAuthProgressDialog;
     private String mUserName, mUserEmail, mPassword;
+    private String currentUID;
 
     EditText etUsername;
     EditText etEmail;
@@ -103,6 +108,8 @@ public class Registration extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         mAuthProgressDialog.dismiss();
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        final DatabaseReference userLocation = FirebaseDatabase.getInstance().getReference();
                         Log.i(LOG_TAG, getString(R.string.log_message_auth_successful));
 
                         if (!task.isSuccessful()) {
@@ -111,7 +118,20 @@ public class Registration extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Intent registerIntent = new Intent(Registration.this, Profile.class);
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(mUserName).build();
+                            user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        HashMap<String, Object> joined = new HashMap<String, Object>();
+                                        joined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+                                        Log.d(LOG_TAG, "User profile created.");
+                                        User currentUser = new User(mUserName,mUserEmail,joined);
+                                        userLocation.setValue(currentUser);
+                                    }
+                                }
+                            });
+                            Intent registerIntent = new Intent(Registration.this, pictureUpload.class);
                             startActivity(registerIntent);
                             finish();
                         }
