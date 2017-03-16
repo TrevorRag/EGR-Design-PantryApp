@@ -7,10 +7,11 @@ import java.util.HashMap;
  */
 
 public class User {
-    private String name;
+    private String username;
     private String email;
     private HashMap<String, Object> timestampJoined;
-    private boolean hasLoggedInWithPassword;
+    private String phone;
+    private String photoUrl;
 
 
     /**
@@ -21,21 +22,20 @@ public class User {
 
     /**
      * Use this constructor to create new User.
-     * Takes user name, email and timestampJoined as params
+     * Takes user name, email, phone number, and timestampJoined as params
      *
-     * @param name
+     * @param username
      * @param email
      * @param timestampJoined
+     * @param phone
+     * @param photoUrl
      */
-    public User(String name, String email, HashMap<String, Object> timestampJoined) {
-        this.name = name;
-        this.email = email;
+    public User(String username, String email, HashMap<String, Object> timestampJoined, String phone, String photoUrl) {
+        this.username = username;
         this.timestampJoined = timestampJoined;
-        this.hasLoggedInWithPassword = false;
-    }
-
-    public String getName() {
-        return name;
+        this.phone = phone;
+        this.email = email;
+        this.photoUrl = photoUrl;
     }
 
     public String getEmail() {
@@ -46,8 +46,18 @@ public class User {
         return timestampJoined;
     }
 
-    public boolean isHasLoggedInWithPassword() {
-        return hasLoggedInWithPassword;
+    public String getPhone() { return phone; }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
 

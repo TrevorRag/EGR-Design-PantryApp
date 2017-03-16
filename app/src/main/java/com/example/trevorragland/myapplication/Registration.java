@@ -33,8 +33,9 @@ public class Registration extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String LOG_TAG = Registration.class.getSimpleName();
     private ProgressDialog mAuthProgressDialog;
-    private String mUserName, mUserEmail, mPassword;
-    private String currentUID;
+    private String mUserName, mUserEmail, mPassword, mPhone;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference userLocation = database.getReference().child("users");
 
     EditText etUsername;
     EditText etEmail;
@@ -94,6 +95,7 @@ public class Registration extends AppCompatActivity {
         mUserName = etUsername.getText().toString();
         mUserEmail = etEmail.getText().toString().toLowerCase();
         mPassword = etPassword.getText().toString();
+        mPhone = etPhone.getText().toString();
 
         //checks
         boolean validEmail = isEmailValid(mUserEmail);
@@ -109,7 +111,6 @@ public class Registration extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         mAuthProgressDialog.dismiss();
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        final DatabaseReference userLocation = FirebaseDatabase.getInstance().getReference();
                         Log.i(LOG_TAG, getString(R.string.log_message_auth_successful));
 
                         if (!task.isSuccessful()) {
@@ -126,8 +127,8 @@ public class Registration extends AppCompatActivity {
                                         HashMap<String, Object> joined = new HashMap<String, Object>();
                                         joined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
                                         Log.d(LOG_TAG, "User profile created.");
-                                        User currentUser = new User(mUserName,mUserEmail,joined);
-                                        userLocation.setValue(currentUser);
+                                        User currentUser = new User(mUserName, mUserEmail, joined, mPhone, null);
+                                        userLocation.child(encodeEmail(mUserEmail)).setValue(currentUser);
                                     }
                                 }
                             });
@@ -166,5 +167,10 @@ public class Registration extends AppCompatActivity {
 
     private void showErrorToast(String message) {
         Toast.makeText(Registration.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    private String encodeEmail (String email) {
+        String encoded = email.replace(".",",");
+        return encoded;
     }
 }
