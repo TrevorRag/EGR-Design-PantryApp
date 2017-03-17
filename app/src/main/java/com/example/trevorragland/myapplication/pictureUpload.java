@@ -41,7 +41,7 @@ public class pictureUpload extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // Get a URL to the uploaded content
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        //Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -54,7 +54,7 @@ public class pictureUpload extends AppCompatActivity {
     }
 
     public void goToRegistration(View view) {
-        Intent registerIntent = new Intent(pictureUpload.this, Profile.class);
+        Intent registerIntent = new Intent(pictureUpload.this, AddRecipe.class);  //ToDo switch AddRecipe with Registration once ann add recipe button is created in profile
         startActivity(registerIntent);
         finish();
     }

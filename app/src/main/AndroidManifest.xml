@@ -19,7 +19,8 @@
         </activity>
         <activity android:name=".Registration" />
         <activity android:name=".pictureUpload" />
-        <activity android:name=".Profile"></activity>
+        <activity android:name=".Profile" />
+        <activity android:name=".AddRecipe"></activity>
     </application>
 
 </manifest>

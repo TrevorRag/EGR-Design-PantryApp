@@ -41,6 +41,7 @@
         android:textAlignment="center"
         android:layout_below="@+id/textView5"/>
 
+    <!-- TODO Replace this ImageView with something that will get filepaths -->
     <ImageView
         android:id="@+id/imUpload"
         android:layout_width="125dp"
