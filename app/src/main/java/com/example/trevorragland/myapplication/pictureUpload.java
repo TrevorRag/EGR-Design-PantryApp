@@ -54,7 +54,7 @@ public class pictureUpload extends AppCompatActivity {
     }
 
     public void goToRegistration(View view) {
-        Intent registerIntent = new Intent(pictureUpload.this, AddRecipe.class);  //ToDo switch AddRecipe with Registration once ann add recipe button is created in profile
+        Intent registerIntent = new Intent(pictureUpload.this, Registration.class);
         startActivity(registerIntent);
         finish();
     }

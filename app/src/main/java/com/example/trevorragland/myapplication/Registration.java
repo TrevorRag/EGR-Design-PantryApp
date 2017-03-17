@@ -133,8 +133,8 @@ public class Registration extends AppCompatActivity {
                                 }
                             });
 
-                            Intent registerIntent = new Intent(Registration.this, pictureUpload.class);
-                            startActivity(registerIntent);
+                            Intent mainIntent = new Intent(Registration.this, Main.class);
+                            startActivity(mainIntent);
                             finish();
                         }
                     }

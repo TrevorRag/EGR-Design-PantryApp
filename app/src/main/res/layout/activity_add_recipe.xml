@@ -6,8 +6,9 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center" />
-    <!--android:src="@drawable/fastfood"-->
+        android:layout_gravity="center"
+        android:src="@drawable/fastfood" />
+
     <EditText
         android:id="@+id/recipeName"
         android:layout_width="match_parent"

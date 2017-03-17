@@ -90,8 +90,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Intent profileIntent = new Intent(Login.this, Profile.class);
-                            startActivity(profileIntent);
+                            Intent mainIntent = new Intent(Login.this, Main.class);
+                            startActivity(mainIntent);
                             finish();
                         }
                     }
@@ -127,8 +127,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             updateUI(true);
-            Intent profileIntent = new Intent(Login.this, Profile.class);
-            startActivity(profileIntent);
+            Intent mainIntent = new Intent(Login.this, Main.class);
+            startActivity(mainIntent);
             finish();
         } else {        // Signed out, show unauthenticated UI.
             updateUI(false);

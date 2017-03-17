@@ -122,7 +122,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:hint="Username" />
+        android:hint="Email" />
 
     <TextView
         android:text="Register"
