@@ -20,7 +20,7 @@ import static com.example.trevorragland.myapplication.Login.encodeEmail;
  */
 
 public class AddRecipe extends AppCompatActivity {
-    //Variables
+    //Variables 
     private String mRecipeName, mRecipeIngredients, mRecipePrep;
     EditText etRecipeName;
     EditText etRecipeIngredients;
