@@ -10,69 +10,117 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.trevorragland.myapplication.Profile">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/etUsername"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+    <!-- Welcome Message-->
 
     <TextView
-        android:text="Profile"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/tvWelcomeMsg"
-        android:textAppearance="@android:style/TextAppearance.Material.Title"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentStart="true"
-        android:id="@+id/etPhone"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/etEmail"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Phone "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView4"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView3"
-        android:layout_below="@+id/etEmail" />
+        android:layout_alignParentTop="true"
+        android:text="Profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="@color/colorAccent" />
 
-    <TextView
-        android:text="Username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvWelcomeMsg" />
+    <LinearLayout
+        android:id="@+id/layoutSpacing"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:layout_below="@id/tvWelcomeMsg">
 
-    <!-- TODO Add a create recipe button to get to the add recipe screen -->
-    <TextView
-        android:text="Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/etUsername"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView2" />
+        <LinearLayout
+            android:id="@+id/layoutUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/UsernameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/emailTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvUsername"
+                android:text="Email"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:paddingTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/phoneTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvEmail"
+                android:text="Phone "
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:paddingTop="10dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/phoneTv"
+                android:ems="10"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Username -->
+
+    <!-- Show Username-->
+
+    <!-- Email -->
+
+    <!-- Show Email -->
+
+    <!-- Phone -->
+
+    <!-- Show Phone -->
 
 </RelativeLayout>

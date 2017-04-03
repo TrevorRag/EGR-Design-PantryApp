@@ -3,7 +3,7 @@ package com.example.trevorragland.myapplication;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TextView;
 
 
@@ -28,21 +28,21 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        final EditText etUsername = (EditText) findViewById(R.id.etUsername);
-        final EditText etEmail = (EditText) findViewById(R.id.etEmail);
-        final EditText etPhone = (EditText) findViewById(R.id.etPhone);
+        final TextView tvUsername = (TextView) findViewById(R.id.tvUsername);
+        final TextView tvEmail = (TextView) findViewById(R.id.tvEmail);
+        final TextView tvPhone = (TextView) findViewById(R.id.tvPhone);
         final TextView welcomeMessage = (TextView) findViewById(R.id.tvWelcomeMsg);
 
         getCurrentUser();
         DatabaseReference userLocation = database.getReference().child("users").child(encodeEmail(email));
-        etUsername.setText(name);
-        etEmail.setText(email);
+        tvUsername.setText(name);
+        tvEmail.setText(email);
 
         userLocation.child("phone").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String phoneNumber = dataSnapshot.getValue(String.class);
-                etPhone.setText(phoneNumber);
+                tvPhone.setText(phoneNumber);
             }
 
             @Override

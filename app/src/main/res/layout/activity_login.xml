@@ -10,82 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.trevorragland.myapplication.Login">
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:background="#000000"-->
-        <!--&gt;-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="65sp"-->
-        <!--android:shadowColor="#FFFFFF"-->
-        <!--android:shadowDx="0"-->
-        <!--android:shadowDy="0"-->
-        <!--android:shadowRadius="3"-->
-
-        <!--android:text="@string/app_name"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textColor="#3b0741"-->
-        <!--/>-->
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:id="@+id/username_login_page"-->
-        <!--android:background="#504e4e"-->
-        <!--&gt;-->
-
-    <!--<EditText-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@drawable/back"-->
-        <!--android:textColor="#4b0654"-->
-        <!--android:hint="@string/username" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/password_login_page"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:layout_below="@+id/username_login_page"-->
-        <!--android:background="#504e4e"-->
-        <!--&gt;-->
-
-    <!--<EditText-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="#4b0654"-->
-        <!--android:hint="@string/passwrd"-->
-        <!--android:inputType="textPassword" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--<Button-->
-        <!--android:id="@+id/button1"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/password_login_page"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:onClick="login"-->
-        <!--android:text="@string/login" />-->
-
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/button1"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:text="@string/sign_up"-->
-        <!--android:autoLink="all"-->
-        <!--android:textSize="24sp"-->
-        <!--android:linksClickable="true"-->
-        <!--/>-->
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,22 +20,6 @@
         android:id="@+id/etPassword"
         android:layout_alignParentEnd="true"
         android:hint="Password" />
-
-    <Button
-        android:text="Login"
-        android:onClick="signIn"
-        android:layout_width="175sp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
-        android:id="@+id/bLogin" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/login_with_google"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword"
-        android:layout_toEndOf="@+id/bLogin"
-        android:layout_alignParentEnd="true"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -131,6 +39,31 @@
         android:layout_marginTop="20dp"
         android:id="@+id/tvRegister"
         android:textAlignment="center"
-        android:layout_below="@+id/login_with_google"
+        android:layout_below="@+id/signInLayout"
         android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:id="@+id/signInLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etPassword"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/bLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="signIn"
+            android:text="Login" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/login_with_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_weight="1" />
+<!--TODO: Add a hamburger -->
+    </LinearLayout>
 </RelativeLayout>

@@ -35,7 +35,6 @@ public class Main extends AppCompatActivity {
     public void onAddRecipePressed (View view) {
         Intent addRecipeIntent = new Intent(Main.this, AddRecipe.class);
         startActivity(addRecipeIntent);
-        finish();
     }
 
     public void onAccountPressed (View view) {
@@ -45,7 +44,6 @@ public class Main extends AppCompatActivity {
                 //Double click image to go to the Profile page
                 Intent profileIntent = new Intent(Main.this, Profile.class);
                 startActivity(profileIntent);
-                finish();
             }
         });
 

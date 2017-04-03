@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/ivUserInformation"
-        android:layout_width="400dp"
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:src="@drawable/user_icon"
         android:onClick="onAccountPressed"
