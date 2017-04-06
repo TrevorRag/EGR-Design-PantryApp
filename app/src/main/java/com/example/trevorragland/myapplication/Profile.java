@@ -54,7 +54,7 @@ public class Profile extends AppCompatActivity {
 
     //call this for user information
     public void getCurrentUser() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user != null) {
             // Name, email address, and profile photo Url
             name = user.getDisplayName();

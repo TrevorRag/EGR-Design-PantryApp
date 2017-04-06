@@ -119,16 +119,14 @@ public class Registration extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
+
+                            Log.d(LOG_TAG, "User profile created.");
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(mUserName).build();
                             user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        HashMap<String, Object> joined = new HashMap<String, Object>();
-                                        joined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-                                        Log.d(LOG_TAG, "User profile created.");
-                                        User currentUser = new User(mUserName, mUserEmail, joined, mPhone, null);
-                                        userLocation.child(encodeEmail(mUserEmail)).setValue(currentUser);
+                                        createDatabaseUser();
                                     }
                                 }
                             });
@@ -166,12 +164,17 @@ public class Registration extends AppCompatActivity {
         return true;
     }
 
-    private void showErrorToast(String message) {
-        Toast.makeText(Registration.this, message, Toast.LENGTH_LONG).show();
-    }
-
     private String encodeEmail (String email) {
         String encoded = email.replace(".",",");
         return encoded;
+    }
+
+    // I made this its own method to reduce clutter. might put it back where it was later.
+    private void createDatabaseUser() {
+        HashMap<String, Object> joined = new HashMap<String, Object>();
+        joined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        Log.d(LOG_TAG, "Database profile created.");
+        User currentUser = new User(mUserName, mUserEmail, joined, mPhone, null);
+        userLocation.child(encodeEmail(mUserEmail)).setValue(currentUser);
     }
 }

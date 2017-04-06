@@ -1,14 +1,26 @@
 package com.example.trevorragland.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import com.google.android.gms.auth.api.Auth;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
-import android.widget.Button;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import android.widget.ImageView;
+
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.example.trevorragland.myapplication.Login.encodeEmail;
 
 /**
  * Created by AD on 3/16/2017.
@@ -16,30 +28,55 @@ import android.widget.ImageView;
 
 public class Main extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    ImageView ivUserInformation;
+    private StorageReference storage = FirebaseStorage.getInstance().getReference();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private String email;
+    private String profilePic;
+    private String name;
+    private String googleUser;
+    URL pic = null;
+
+    private static final String LOG_TAG = Main.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
 
+        /* This block is the user information from the Google account information */
+        storage = FirebaseStorage.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        email = getIntent().getStringExtra("userEmail");
+        profilePic = getIntent().getStringExtra("userPic");
+        name = getIntent().getStringExtra("userName");
+        googleUser = getIntent().getStringExtra("userID");
+        /*                                                                       */
 
+        //sets the Google URL to imageview
+        if (isValidUrl(pic, profilePic)) {
+            new DownloadImageTask((ImageView) findViewById(R.id.ivUserInformation))
+                    .execute(profilePic);
+        }
+        //elseif get pic from database.
     }
 
     //we haven't implemented this, so this button just closes the app
-    public void onMyRecipePressed (View view) {
+    public void onMyRecipePressed(View view) {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
+
         System.exit(0);
     }
 
-    public void onAddRecipePressed (View view) {
+    public void onAddRecipePressed(View view) {
         Intent addRecipeIntent = new Intent(Main.this, AddRecipe.class);
         startActivity(addRecipeIntent);
     }
 
-    public void onAccountPressed (View view) {
-        ImageView userIcon = (ImageView) findViewById(R.id.ivUserInformation);
-        userIcon.setOnClickListener(new View.OnClickListener() {
+    public void onAccountPressed(View view) {
+        ivUserInformation.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 //Double click image to go to the Profile page
                 Intent profileIntent = new Intent(Main.this, Profile.class);
@@ -47,7 +84,7 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        userIcon.setOnLongClickListener(new View.OnLongClickListener() {
+        ivUserInformation.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 //Long click image to go to upload image page
@@ -57,4 +94,64 @@ public class Main extends AppCompatActivity {
             }
         });
     }
+
+    //Turns the specified URL (Google profile pic) into a bitmap
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
+    //Checks to make sure the new URL is valid.
+    //URL comes from Google+ profile pic.
+    public boolean isValidUrl(URL url, String urlString) {
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        if (url != null) {
+            return true;
+        }
+        return false;
+    }
+
+    //Todo grab profil pic from database
+    /*public void getFile(Uri profilePic) {
+        File localFile = File.createTempFile(/*randaom stuff*//*);
+        storage.getFile(localFile)
+                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Successfully downloaded data to local file
+                        // ...
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle failed download
+                // ...
+            }
+        });
+    }*/
 }

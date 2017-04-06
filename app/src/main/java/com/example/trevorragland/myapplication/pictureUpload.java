@@ -32,6 +32,7 @@ public class pictureUpload extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
+    //todo add a get file from computer method
     private void putFile() {
         Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
         StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
