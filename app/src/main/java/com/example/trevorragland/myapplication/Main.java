@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -41,6 +44,8 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //****************************************
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
