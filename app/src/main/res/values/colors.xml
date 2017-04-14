@@ -3,4 +3,9 @@
     <color name="colorPrimary">#4f8640</color>
     <color name="colorPrimaryDark">#090a09</color>
     <color name="colorAccent">#4f8640</color>
+    <color name="cursorAccent">#543693</color>
+    <color name="controlNormal">@android:color/holo_blue_light</color>
+    <color name="controlActivated">#543693</color>
+    <color name="controlHighlight">@android:color/holo_red_dark</color>
+    <color name="colorTitle">@android:color/white</color>
 </resources>

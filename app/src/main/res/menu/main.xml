@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miHome"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="collapseActionView"
+        android:title="Home"
+        android:onClick="onOptionsItemSelected">
+    </item>
+    <item
+        android:id="@+id/miProfile"
+        android:icon="@drawable/colors__"
+        app:showAsAction="collapseActionView"
+        android:title="Profile"
+        android:onClick="onOptionsItemSelected">
+    </item>
+    <item
+        android:id="@+id/miPicture"
+        android:icon="@drawable/colors__"
+        app:showAsAction="collapseActionView"
+        android:title="Profile Picture"
+        android:onClick="onOptionsItemSelected">
+    </item>
+    <item
+        android:id="@+id/miAddRecipe"
+        android:icon="@drawable/colors__"
+        app:showAsAction="collapseActionView"
+        android:title="Add Recipe"
+        android:onClick="onOptionsItemSelected">
+    </item>
+    <item
+        android:id="@+id/miCompose"
+        android:icon="@drawable/colors__"
+        app:showAsAction="collapseActionView"
+        android:title="View Recipe"
+        android:onClick="onOptionsItemSelected">
+    </item>
+
+</menu>
+

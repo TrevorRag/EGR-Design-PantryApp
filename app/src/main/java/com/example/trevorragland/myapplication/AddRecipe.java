@@ -3,6 +3,9 @@ package com.example.trevorragland.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -36,10 +39,23 @@ public class AddRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         etRecipeName = (EditText) findViewById(R.id.recipeName);
         etRecipeIngredients= (EditText) findViewById(R.id.recipeIngredients);
         etRecipePreparation= (EditText) findViewById(R.id.cookingProcess);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     //function to saveRecipe in Firebase
@@ -65,8 +81,50 @@ public class AddRecipe extends AppCompatActivity {
         etRecipeIngredients.setText("");
         etRecipeName.setText("");
         etRecipePreparation.setText("");
-
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.miHome:
+                onMenuHomePressed(item);
+                return true;
+            case R.id.miProfile:
+                onMenuProfilePressed(item);
+                return true;
+            case R.id.miPicture:
+                onMenuPicPressed(item);
+                return true;
+            case R.id.miAddRecipe:
+                onMenuAddRecipePressed(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
+    private void onMenuHomePressed(MenuItem item) {
+        Intent mainIntent = new Intent(AddRecipe.this, Main.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
+    private void onMenuProfilePressed(MenuItem item) {
+        Intent profileIntent = new Intent(AddRecipe.this, Profile.class);
+        startActivity(profileIntent);
+        finish();
+    }
+
+    private void onMenuPicPressed(MenuItem item) {
+        Intent picIntent = new Intent(AddRecipe.this, pictureUpload.class);
+        startActivity(picIntent);
+        finish();
+    }
+
+    private void onMenuAddRecipePressed(MenuItem item) {
+        Intent addRecipeIntent = new Intent(AddRecipe.this, AddRecipe.class);
+        startActivity(addRecipeIntent);
+        finish();
+    }
 }

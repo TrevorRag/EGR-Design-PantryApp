@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,6 +30,13 @@ public class pictureUpload extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_upload);
+
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         final Button bUpload = (Button) findViewById(R.id.bUpload);
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -60,4 +70,55 @@ public class pictureUpload extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.miHome:
+                onMenuHomePressed(item);
+                return true;
+            case R.id.miProfile:
+                onMenuProfilePressed(item);
+                return true;
+            case R.id.miPicture:
+                onMenuPicPressed(item);
+                return true;
+            case R.id.miAddRecipe:
+                onMenuAddRecipePressed(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onMenuHomePressed(MenuItem item) {
+        Intent mainIntent = new Intent(pictureUpload.this, Main.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
+    private void onMenuProfilePressed(MenuItem item) {
+        Intent profileIntent = new Intent(pictureUpload.this, Profile.class);
+        startActivity(profileIntent);
+        finish();
+    }
+
+    private void onMenuPicPressed(MenuItem item) {
+        Intent picIntent = new Intent(pictureUpload.this, pictureUpload.class);
+        startActivity(picIntent);
+        finish();
+    }
+
+    private void onMenuAddRecipePressed(MenuItem item) {
+        Intent addRecipeIntent = new Intent(pictureUpload.this, AddRecipe.class);
+        startActivity(addRecipeIntent);
+        finish();
+    }
 }

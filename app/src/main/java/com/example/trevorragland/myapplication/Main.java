@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,13 +19,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.example.trevorragland.myapplication.Login.encodeEmail;
 
 /**
  * Created by AD on 3/16/2017.
@@ -44,10 +44,16 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //****************************************
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //toolbar stuff
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
 
         /* This block is the user information from the Google account information */
@@ -66,7 +72,7 @@ public class Main extends AppCompatActivity {
         }
         //elseif get pic from database.
     }
-
+    
     //we haven't implemented this, so this button just closes the app
     public void onMyRecipePressed(View view) {
         mAuth = FirebaseAuth.getInstance();
@@ -141,7 +147,56 @@ public class Main extends AppCompatActivity {
         return false;
     }
 
-    //Todo grab profil pic from database
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.miHome:
+                onMenuHomePressed(item);
+                return true;
+            case R.id.miProfile:
+                onMenuProfilePressed(item);
+                return true;
+            case R.id.miPicture:
+                onMenuPicPressed(item);
+                return true;
+            case R.id.miAddRecipe:
+                onMenuAddRecipePressed(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onMenuHomePressed(MenuItem item) {
+        Intent mainIntent = new Intent(Main.this, Main.class);
+        startActivity(mainIntent);
+        finish();
+    }
+
+    private void onMenuProfilePressed(MenuItem item) {
+        Intent profileIntent = new Intent(Main.this, Profile.class);
+        startActivity(profileIntent);
+    }
+
+    private void onMenuPicPressed(MenuItem item) {
+        Intent picIntent = new Intent(Main.this, pictureUpload.class);
+        startActivity(picIntent);
+    }
+
+    private void onMenuAddRecipePressed(MenuItem item) {
+        Intent addRecipeIntent = new Intent(Main.this, AddRecipe.class);
+        startActivity(addRecipeIntent);
+    }
+
+    //Todo grab profile pic from database
     /*public void getFile(Uri profilePic) {
         File localFile = File.createTempFile(/*randaom stuff*//*);
         storage.getFile(localFile)
