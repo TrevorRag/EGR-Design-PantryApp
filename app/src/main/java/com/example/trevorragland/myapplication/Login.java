@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -31,8 +32,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+
+import static java.net.URI.create;
 
 
 public class Login extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -107,6 +111,9 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                                     Toast.LENGTH_SHORT).show();
                         }
                         else {
+                            AuthCredential credential = EmailAuthProvider.getCredential(mUserEmail, mPassword);
+                            linkWithCredential(credential);
+
                             Intent mainIntent = new Intent(Login.this, Main.class);
                             startActivity(mainIntent);
                             finish();
@@ -131,15 +138,14 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         Log.d(LOG_TAG, "firebaseAuthWithGoogle:" + acct.getId());
         final AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d(LOG_TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
+                        Log.d(LOG_TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -156,15 +162,16 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            GoogleSignInAccount account = result.getSignInAccount();
-            firebaseAuthWithGoogle(account);
+
+            GoogleSignInAccount acct = result.getSignInAccount();
+            firebaseAuthWithGoogle(acct);
             updateUI(true);
 
             //Bundles up the user info to send to main
-            userBundle.putString("userName",account.getDisplayName());
-            userBundle.putString("userEmail",account.getEmail());
-            userBundle.putString("userID",account.getId());
-            userBundle.putString("userPic",account.getPhotoUrl().toString());
+            userBundle.putString("userName",acct.getDisplayName());
+            userBundle.putString("userEmail",acct.getEmail());
+            userBundle.putString("userID",acct.getId());
+            userBundle.putString("userPic",acct.getPhotoUrl().toString());
 
             Intent mainIntent = new Intent(Login.this, Main.class);
             mainIntent.putExtras(userBundle);
@@ -214,14 +221,35 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
         return true;
     }
 
+    //FIND OUT WHERE TO PUT THIS FOR GOOGLE
     public void createDatabaseGoogleUser(String username, String email, String pic) {
         /* newstuff start */
         HashMap<String, Object> joined = new HashMap<String, Object>();
         joined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        User googleUser = new User(username, email, joined, null, Uri.parse(pic));
+        User googleUser = new User(username, email, joined, null, URI.create(pic));
         userLocation.child(encodeEmail(email)).setValue(googleUser);
-        System.out.println("Current user = " + googleUser.getEmail());
                         /* newstuff end */
     }
 
+    //FIND OUT WHERE TO PUT THIS FOR GOOGLE
+    private void linkWithCredential (AuthCredential credential) {
+        mAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(LOG_TAG, "linkWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(Login.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+
+    }
 }

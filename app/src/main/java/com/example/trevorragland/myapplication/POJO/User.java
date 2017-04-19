@@ -2,6 +2,7 @@ package com.example.trevorragland.myapplication.POJO;
 
 import android.net.Uri;
 
+import java.net.URI;
 import java.util.HashMap;
 
 /**
@@ -13,7 +14,7 @@ public class User {
     private String email;
     private HashMap<String, Object> timestampJoined;
     private String phone;
-    private Uri photoUrl;
+    private URI photoUrl;
 
 
     /**
@@ -32,7 +33,7 @@ public class User {
      * @param phone
      * @param photoUrl
      */
-    public User(String username, String email, HashMap<String, Object> timestampJoined, String phone, Uri photoUrl) {
+    public User(String username, String email, HashMap<String, Object> timestampJoined, String phone, URI photoUrl) {
         this.username = username;
         this.timestampJoined = timestampJoined;
         this.phone = phone;
@@ -50,7 +51,7 @@ public class User {
 
     public String getPhone() { return phone; }
 
-    public Uri getPhotoUrl() {
+    public URI getPhotoUrl() {
         return photoUrl;
     }
 
@@ -58,7 +59,7 @@ public class User {
         return username;
     }
 
-    public void setPhotoUrl(Uri photoUrl) {
+    public void setPhotoUrl(URI photoUrl) {
         this.photoUrl = photoUrl;
     }
 }
