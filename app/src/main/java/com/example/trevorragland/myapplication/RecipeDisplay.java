@@ -1,6 +1,7 @@
 package com.example.trevorragland.myapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -47,7 +48,7 @@ public class RecipeDisplay extends AppCompatActivity {
         tvIngredientList = (TextView) findViewById(R.id.tvIngredientList);
         tvPreparationList = (TextView) findViewById(R.id.tvPreparationList);
 
-        recipeFetch("907321");
+        recipeFetch("172112");
 
     }
 
@@ -59,9 +60,31 @@ public class RecipeDisplay extends AppCompatActivity {
         $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(this).success(new Function() {
             @Override
             public void invoke($ droidQuery, Object... params) {
-                //droidQuery.alert((String) params[0]);
-               // $("textare#ExampleMessage").text(result.ExampleMessage);
-                $.with(tvPreparationList).data("Instructions");
+                //get the title
+                String please = params[0].toString();
+                String[] check = please.split("Title\":\"");
+                check = check[1].split("\"");
+                please = check[0];
+                please = please.replaceAll("\r\n\r\n","  ");
+                $.with(tvRecipeName).val(please);
+
+                //get the ingredients
+                please = params[0].toString();
+                check = please.split("Instructions\":\"");
+                check = check[1].split("\"");
+                please = check[0];
+                please = please.replaceAll("\r\n\r\n","  ");
+                $.with(tvPreparationList).val(please);
+
+                //get the ingredients
+                please = params[0].toString();
+                check = please.split("ImageURL\":\"");
+                check = check[1].split("\"");
+                please = check[0];
+                please = please.replaceAll("\\\\","");
+                Uri thumbnail = Uri.parse(please);
+                ivRecipeThumb.setImageURI(thumbnail);
+
             }
         }).error(new Function() {
             @Override
