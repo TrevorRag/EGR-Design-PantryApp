@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.trevorragland.myapplication.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -24,6 +26,10 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import self.philbrown.droidQuery.$;
+import self.philbrown.droidQuery.AjaxOptions;
+import self.philbrown.droidQuery.Function;
+
 
 /**
  * Created by AD on 3/16/2017.
@@ -32,6 +38,7 @@ import java.net.URL;
 public class Main extends AppCompatActivity {
     private FirebaseAuth mAuth;
     ImageView ivUserInformation;
+    SearchView svSearch;
     private StorageReference storage = FirebaseStorage.getInstance().getReference();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String email;
@@ -39,6 +46,7 @@ public class Main extends AppCompatActivity {
     private String name;
     private String googleUser;
     URL pic = null;
+    private String apiKey = Constants.BIGOVEN_API_KEY;
 
     private static final String LOG_TAG = Main.class.getSimpleName();
 
@@ -55,6 +63,7 @@ public class Main extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
+        //svSearch = (SearchView) findViewById(R.id.svRecipeSearch);
 
         /* This block is the user information from the Google account information */
         storage = FirebaseStorage.getInstance().getReference();
@@ -72,13 +81,38 @@ public class Main extends AppCompatActivity {
         }
         //elseif get pic from database.
     }
-    
+
+    public void RecipeSearch(String searchWord) {
+        String recipeUrl = "https://api2.bigoven.com/recipe/"
+                + searchWord
+                + "?api_key=" + apiKey;
+
+        $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(this).success(new Function() {
+            @Override
+            public void invoke($ droidQuery, Object... params) {
+                droidQuery.alert((String) params[0]);
+                $.with(svSearch).data();
+            }
+        }).error(new Function() {
+            @Override
+            public void invoke($ droidQuery, Object... params) {
+                int statusCode = (Integer) params[1];
+                String error = (String) params[2];
+                Log.e("Ajax", statusCode + " " + error);
+            }
+        }));
+    }
+
     //we haven't implemented this, so this button just closes the app
     public void onMyRecipePressed(View view) {
+        /*****logout********
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
-
         System.exit(0);
+        ********************/
+
+        Intent startRecipeDisplay = new Intent(Main.this, RecipeDisplay.class);
+        startActivity(startRecipeDisplay);
     }
 
     public void onAddRecipePressed(View view) {
