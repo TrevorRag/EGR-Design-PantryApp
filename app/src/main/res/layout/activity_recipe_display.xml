@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/ivRecipeThumb"
         android:layout_width="match_parent"
-        android:layout_height="169dp"
+        android:layout_height="136dp"
         app:srcCompat="@drawable/colors__" />
 
     <TextView
@@ -30,18 +30,20 @@
         android:layout_height="wrap_content"
         android:text="Ingredients:"
         android:textColor="@android:color/black"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textSize="18sp"
         android:textStyle="bold" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="169dp">
+        android:layout_height="138dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:orientation="vertical" >
 
             <TextView
@@ -60,6 +62,8 @@
         android:layout_height="wrap_content"
         android:text="Preparation:"
         android:textColor="@android:color/black"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -70,8 +74,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:orientation="vertical" >
 
             <TextView

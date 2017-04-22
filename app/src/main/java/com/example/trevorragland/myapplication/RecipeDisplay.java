@@ -1,10 +1,14 @@
 package com.example.trevorragland.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +18,13 @@ import android.widget.TextView;
 
 import com.example.trevorragland.myapplication.utils.Constants;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 
 import self.philbrown.droidQuery.$;
 import self.philbrown.droidQuery.AjaxOptions;
@@ -30,6 +40,9 @@ public class RecipeDisplay extends AppCompatActivity {
     TextView tvRecipeName;
     TextView tvIngredientList;
     TextView tvPreparationList;
+    private String[] ingredientList;
+    String allIngredients = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +61,16 @@ public class RecipeDisplay extends AppCompatActivity {
         tvIngredientList = (TextView) findViewById(R.id.tvIngredientList);
         tvPreparationList = (TextView) findViewById(R.id.tvPreparationList);
 
-        recipeFetch("172112");
-
+        //RecipeID
+        recipeFetch("1917985");
     }
 
+
     public void recipeFetch(String recipeId) {
-        String recipeUrl = "https://api2.bigoven.com/recipe/"
+
+        JSONObject obj = new JSONObject();
+
+        final String recipeUrl = "https://api2.bigoven.com/recipe/"
                 + recipeId
                 + "?api_key=" + apiKey;
 
@@ -61,29 +78,62 @@ public class RecipeDisplay extends AppCompatActivity {
             @Override
             public void invoke($ droidQuery, Object... params) {
                 //get the title
-                String please = params[0].toString();
-                String[] check = please.split("Title\":\"");
-                check = check[1].split("\"");
-                please = check[0];
-                please = please.replaceAll("\r\n\r\n","  ");
-                $.with(tvRecipeName).val(please);
+                String pls = params[0].toString();
 
-                //get the ingredients
-                please = params[0].toString();
-                check = please.split("Instructions\":\"");
-                check = check[1].split("\"");
-                please = check[0];
-                please = please.replaceAll("\r\n\r\n","  ");
-                $.with(tvPreparationList).val(please);
+                try {
+                    //gets the JSON output from the website
+                    JSONObject obj = new JSONObject(pls);
 
-                //get the ingredients
-                please = params[0].toString();
-                check = please.split("ImageURL\":\"");
-                check = check[1].split("\"");
-                please = check[0];
-                please = please.replaceAll("\\\\","");
-                Uri thumbnail = Uri.parse(please);
-                ivRecipeThumb.setImageURI(thumbnail);
+                    //**************Picture Start**************
+                    String url = obj.getString("PhotoUrl");
+                    new DownloadImageTask((ImageView) findViewById(R.id.ivRecipeThumb))
+                            .execute(url);
+                    //**************Picture End****************
+
+                    //**************Title Start****************
+                    String title = obj.getString("Title");
+                    $.with(tvRecipeName).val(title);
+                    //**************Title End******************
+
+                    //**************Ingredients Start**********
+                    JSONArray tempArray = new JSONArray();
+                    JSONArray fini = new JSONArray();
+
+                    //siphons the extra information out of the ingredients array
+                    for (int i = 0; i < 7; i++) {
+                        JSONObject ingredients = obj.getJSONArray("Ingredients").getJSONObject(i);
+                        tempArray.put(ingredients.getString("Name").trim() + ": ");
+                        tempArray.put(ingredients.getString("Quantity").trim());
+                        tempArray.put(" " + ingredients.getString("Unit").trim());
+                        tempArray.put(" " + ingredients.getString("PreparationNotes").trim() + "\n");
+                        fini.put(tempArray);
+                        fini.remove(1);
+                        String getIngredient = fini.getString(0);
+                        ingredientList = getIngredient.split("\\\\n\",\"");
+                    }
+
+                    //turns the array into an easy to read string
+                    for (int i = 0; i < ingredientList.length; i++) {
+                        String temp = ingredientList[i];
+                        temp = temp.replaceAll("\\[","");
+                        temp = temp.replaceAll("\"","");
+                        temp = temp.replaceAll(",","");
+                        temp = temp.replaceAll("\\]","");
+                        temp = temp.replaceAll("\\\\n","");
+                        temp += "\r\n\r\n";
+                        allIngredients += temp;
+                    }
+                    $.with(tvIngredientList).val(allIngredients);
+                    //**************Ingredients End************
+
+                    //**************Instructions Start*********
+                    String prep = obj.getString("Instructions");
+                    $.with(tvPreparationList).val(prep);
+                    //**************Instructions End***********
+                }
+                catch (JSONException e) {
+                    System.err.println("Caught JSONException: " + e.getMessage());
+                }
 
             }
         }).error(new Function() {
@@ -147,4 +197,29 @@ public class RecipeDisplay extends AppCompatActivity {
         startActivity(addRecipeIntent);
         finish();
     }
+    public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
 }

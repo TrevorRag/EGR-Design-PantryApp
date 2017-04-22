@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -80,6 +81,20 @@ public class Main extends AppCompatActivity {
                     .execute(profilePic);
         }
         //elseif get pic from database.
+
+        /*svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(Main.this,"Our word : "+s,Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });*/
     }
 
     public void RecipeSearch(String searchWord) {
@@ -179,6 +194,14 @@ public class Main extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public boolean onQueryTextSubmit(String query)
+    {
+        Intent searchIntent = new Intent(Main.this, RecipeDisplay.class);
+        searchIntent.putExtra("query", query);
+        startActivity(searchIntent);
+        return true;
     }
 
     @Override
