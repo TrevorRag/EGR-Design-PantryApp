@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -64,7 +64,7 @@ public class Main extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
-        //svSearch = (SearchView) findViewById(R.id.svRecipeSearch);
+        svSearch = (SearchView) findViewById(R.id.svRecipeSearch);
 
         /* This block is the user information from the Google account information */
         storage = FirebaseStorage.getInstance().getReference();
@@ -82,10 +82,11 @@ public class Main extends AppCompatActivity {
         }
         //elseif get pic from database.
 
-        /*svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 
             @Override
             public boolean onQueryTextSubmit(String s) {
+                RecipeSearch(s);
                 Toast.makeText(Main.this,"Our word : "+s,Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -94,7 +95,7 @@ public class Main extends AppCompatActivity {
             public boolean onQueryTextChange(String s) {
                 return false;
             }
-        });*/
+        });
     }
 
     public void RecipeSearch(String searchWord) {
@@ -155,6 +156,7 @@ public class Main extends AppCompatActivity {
         });
     }
 
+
     //Turns the specified URL (Google profile pic) into a bitmap
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
@@ -194,6 +196,9 @@ public class Main extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void onQueryTextSubmit(View view) {
     }
 
     public boolean onQueryTextSubmit(String query)
