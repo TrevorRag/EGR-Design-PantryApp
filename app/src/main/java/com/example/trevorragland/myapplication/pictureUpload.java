@@ -99,8 +99,6 @@ public class pictureUpload extends AppCompatActivity {
     }
 
     private void onMenuHomePressed(MenuItem item) {
-        Intent mainIntent = new Intent(pictureUpload.this, Main.class);
-        startActivity(mainIntent);
         finish();
     }
 

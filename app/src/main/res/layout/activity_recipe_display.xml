@@ -50,7 +50,7 @@
                 android:id="@+id/tvIngredientList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="Ingredient List failed to load."
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -82,7 +82,7 @@
                 android:id="@+id/tvPreparationList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:text="Preparation list failed to load."
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
         </LinearLayout>

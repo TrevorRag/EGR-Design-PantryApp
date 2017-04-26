@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.util.concurrent.ThreadLocalRandom;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -62,7 +63,9 @@ public class RecipeDisplay extends AppCompatActivity {
         tvPreparationList = (TextView) findViewById(R.id.tvPreparationList);
 
         //RecipeID
-        recipeFetch("1917985");
+        String[] idList = {"1917985","334","163933","741582","174337","172112"};
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 6);
+        recipeFetch(idList[randomNum]);
     }
 
 
@@ -175,8 +178,6 @@ public class RecipeDisplay extends AppCompatActivity {
     }
 
     private void onMenuHomePressed(MenuItem item) {
-        Intent mainIntent = new Intent(RecipeDisplay.this, Main.class);
-        startActivity(mainIntent);
         finish();
     }
 

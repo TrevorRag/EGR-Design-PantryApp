@@ -108,8 +108,6 @@ public class Profile extends AppCompatActivity {
     }
 
     private void onMenuHomePressed(MenuItem item) {
-        Intent mainIntent = new Intent(Profile.this, Main.class);
-        startActivity(mainIntent);
         finish();
     }
 

@@ -233,9 +233,7 @@ public class Main extends AppCompatActivity {
     }
 
     private void onMenuHomePressed(MenuItem item) {
-        Intent mainIntent = new Intent(Main.this, Main.class);
-        startActivity(mainIntent);
-        finish();
+
     }
 
     private void onMenuProfilePressed(MenuItem item) {
