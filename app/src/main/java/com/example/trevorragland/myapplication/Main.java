@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -64,7 +64,7 @@ public class Main extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         ivUserInformation = (ImageView) findViewById(R.id.ivUserInformation);
-        //svSearch = (SearchView) findViewById(R.id.svRecipeSearch);
+        svSearch = (SearchView) findViewById(R.id.svRecipeSearch);
 
         /* This block is the user information from the Google account information */
         storage = FirebaseStorage.getInstance().getReference();
@@ -82,31 +82,37 @@ public class Main extends AppCompatActivity {
         }
         //elseif get pic from database.
 
-        /*svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 
             @Override
             public boolean onQueryTextSubmit(String s) {
                 Toast.makeText(Main.this,"Our word : "+s,Toast.LENGTH_SHORT).show();
-                return false;
+                recipeSearch(s);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 return false;
             }
-        });*/
+        });
     }
 
-    public void RecipeSearch(String searchWord) {
-        String recipeUrl = "https://api2.bigoven.com/recipe/"
+    public void recipeSearch(String searchWord) {
+        String recipeUrl = "https://api2.bigoven.com/recipes?pg=1&rpp=25&title_kw="
                 + searchWord
-                + "?api_key=" + apiKey;
+                + "&api_key=" + apiKey;
 
         $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(this).success(new Function() {
             @Override
             public void invoke($ droidQuery, Object... params) {
-                droidQuery.alert((String) params[0]);
-                $.with(svSearch).data();
+                Intent searchIntent = new Intent(Main.this, SearchResults.class);
+                //JSON text
+                String query = params[0].toString();
+                //send JSON text to search result
+                searchIntent.putExtra("query", query);
+                //start search result
+                startActivity(searchIntent);
             }
         }).error(new Function() {
             @Override
@@ -118,14 +124,7 @@ public class Main extends AppCompatActivity {
         }));
     }
 
-    //we haven't implemented this, so this button just closes the app
     public void onMyRecipePressed(View view) {
-        /*****logout********
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
-        System.exit(0);
-        ********************/
-
         Intent startRecipeDisplay = new Intent(Main.this, RecipeDisplay.class);
         startActivity(startRecipeDisplay);
     }
@@ -196,14 +195,6 @@ public class Main extends AppCompatActivity {
         return false;
     }
 
-    public boolean onQueryTextSubmit(String query)
-    {
-        Intent searchIntent = new Intent(Main.this, RecipeDisplay.class);
-        searchIntent.putExtra("query", query);
-        startActivity(searchIntent);
-        return true;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -227,6 +218,9 @@ public class Main extends AppCompatActivity {
             case R.id.miAddRecipe:
                 onMenuAddRecipePressed(item);
                 return true;
+            case R.id.miLogout:
+                onLogoutPressed(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -249,6 +243,14 @@ public class Main extends AppCompatActivity {
     private void onMenuAddRecipePressed(MenuItem item) {
         Intent addRecipeIntent = new Intent(Main.this, AddRecipe.class);
         startActivity(addRecipeIntent);
+    }
+
+    private void onLogoutPressed(MenuItem item) {
+        //*****logout**********
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        System.exit(0);
+        //********************
     }
 
     //Todo grab profile pic from database

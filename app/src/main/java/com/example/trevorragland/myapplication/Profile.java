@@ -24,6 +24,7 @@ import static com.example.trevorragland.myapplication.Login.encodeEmail;
 public class Profile extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseAuth mAuth;
     private String name;
     private String email;
 
@@ -102,6 +103,9 @@ public class Profile extends AppCompatActivity {
             case R.id.miAddRecipe:
                 onMenuAddRecipePressed(item);
                 return true;
+            case R.id.miLogout:
+                onLogoutPressed(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -127,5 +131,13 @@ public class Profile extends AppCompatActivity {
         Intent addRecipeIntent = new Intent(Profile.this, AddRecipe.class);
         startActivity(addRecipeIntent);
         finish();
+    }
+
+    private void onLogoutPressed(MenuItem item) {
+        //*****logout**********
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        System.exit(0);
+        //********************
     }
 }

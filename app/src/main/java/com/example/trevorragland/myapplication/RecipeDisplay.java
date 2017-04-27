@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.trevorragland.myapplication.utils.Constants;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,7 @@ import self.philbrown.droidQuery.Function;
 
 public class RecipeDisplay extends AppCompatActivity {
     final String apiKey = Constants.BIGOVEN_API_KEY;
+    private FirebaseAuth mAuth;
     ImageView ivRecipeThumb;
     TextView tvRecipeName;
     TextView tvIngredientList;
@@ -172,6 +174,9 @@ public class RecipeDisplay extends AppCompatActivity {
             case R.id.miAddRecipe:
                 onMenuAddRecipePressed(item);
                 return true;
+            case R.id.miLogout:
+                onLogoutPressed(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -198,6 +203,15 @@ public class RecipeDisplay extends AppCompatActivity {
         startActivity(addRecipeIntent);
         finish();
     }
+
+    private void onLogoutPressed(MenuItem item) {
+        //*****logout**********
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        System.exit(0);
+        //********************
+    }
+
     public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
 

@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -25,6 +26,7 @@ import java.io.File;
 
 public class pictureUpload extends AppCompatActivity {
     private StorageReference mStorageRef;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,9 @@ public class pictureUpload extends AppCompatActivity {
             case R.id.miAddRecipe:
                 onMenuAddRecipePressed(item);
                 return true;
+            case R.id.miLogout:
+                onLogoutPressed(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -118,5 +123,13 @@ public class pictureUpload extends AppCompatActivity {
         Intent addRecipeIntent = new Intent(pictureUpload.this, AddRecipe.class);
         startActivity(addRecipeIntent);
         finish();
+    }
+
+    private void onLogoutPressed(MenuItem item) {
+        //*****logout**********
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        System.exit(0);
+        //********************
     }
 }

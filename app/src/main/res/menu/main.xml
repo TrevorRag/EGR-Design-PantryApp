@@ -35,6 +35,12 @@
         android:title="View Recipe"
         android:onClick="onOptionsItemSelected">
     </item>
-
+    <item
+        android:id="@+id/miLogout"
+        android:icon="@drawable/colors__"
+        app:showAsAction="collapseActionView"
+        android:title="Logout"
+        android:onClick="onOptionsItemSelected">
+    </item>
 </menu>
 

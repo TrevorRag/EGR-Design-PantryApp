@@ -28,6 +28,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".RecipeDisplay"
             android:screenOrientation="portrait" />
+        <activity android:name=".SearchResults"
+            android:screenOrientation="portrait" />
         <activity android:name=".AddRecipe"
             android:screenOrientation="portrait"></activity>
     </application>

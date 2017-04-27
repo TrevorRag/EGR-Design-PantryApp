@@ -30,6 +30,7 @@ public class AddRecipe extends AppCompatActivity {
     EditText etRecipePreparation;
     //for Firebase Database
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseAuth mAuth;
     //current user email
     private String email;
 
@@ -99,6 +100,9 @@ public class AddRecipe extends AppCompatActivity {
             case R.id.miAddRecipe:
                 onMenuAddRecipePressed(item);
                 return true;
+            case R.id.miLogout:
+                onLogoutPressed(item);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -124,5 +128,13 @@ public class AddRecipe extends AppCompatActivity {
         Intent addRecipeIntent = new Intent(AddRecipe.this, AddRecipe.class);
         startActivity(addRecipeIntent);
         finish();
+    }
+
+    private void onLogoutPressed(MenuItem item) {
+        //*****logout**********
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
+        System.exit(0);
+        //********************
     }
 }
