@@ -46,7 +46,7 @@
         android:layout_gravity="center"
         android:background="@color/colorPrimaryDark"
         android:onClick="saveRecipe"
-        android:text="Save recipe"
+        android:text="     Save recipe     "
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="24sp" />
 </LinearLayout>

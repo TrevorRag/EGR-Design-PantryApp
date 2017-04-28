@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.trevorragland.myapplication.R;
+
+import java.util.Arrays;
 
 /**
  * Created by AD on 4/26/2017.
@@ -15,14 +18,36 @@ import com.example.trevorragland.myapplication.R;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private Integer[] mThumbIds = {R.drawable.fastfood};
+    private Context aContext;
+    // references to our images
+    private String[] recipeTitle;
+    private String[] recipeID;
+    private String[] imageUri;
+    private String[] rCategory;
+    private String[] rSubCategory;
+    private String[] starRating;
 
     public ImageAdapter(Context c) {
         mContext = c;
     }
 
+    public void setSearchInfo (String[] title, String[] id, String[] uri, String[] category, String[] subCategory, String[] rating) {
+        recipeTitle = new String[title.length];
+        System.arraycopy(title, 0, recipeTitle, 0, title.length);
+        recipeID = new String[id.length];
+        System.arraycopy(id, 0, recipeID, 0, id.length);
+        imageUri = new String[uri.length];
+        System.arraycopy(uri, 0, imageUri, 0, uri.length);
+        rCategory = new String[category.length];
+        System.arraycopy(category, 0, category, 0, category.length);
+        rSubCategory = new String[subCategory.length];
+        System.arraycopy(subCategory, 0, subCategory, 0, subCategory.length);
+        starRating = new String[rating.length];
+        System.arraycopy(rating, 0, starRating, 0, rating.length);
+    }
+
     public int getCount() {
-        return mThumbIds.length;
+        return recipeTitle.length;
     }
 
     public Object getItem(int position) {
@@ -33,27 +58,30 @@ public class ImageAdapter extends BaseAdapter {
         return 0;
     }
 
+    public String getID(int position) {
+        return recipeID[position];
+    }
+
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
+        TextView textView;
+        TextView categoryView;
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(256, 256));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            textView = new TextView(mContext);
+            categoryView = new TextView(mContext);
+            textView.setLayoutParams(new GridView.LayoutParams(500,256));
+            textView.setPadding(8, 8, 8, 8);
+            categoryView.setLayoutParams(new GridView.LayoutParams(500,256));
+            categoryView.setPadding(8, 8, 8, 8);
         } else {
-            imageView = (ImageView) convertView;
+            textView = (TextView) convertView;
+            categoryView = (TextView) convertView;
         }
-
-        imageView.setImageResource(mThumbIds[position]);
-        return imageView;
+        categoryView.setText(rCategory[position]);
+        textView.setText(recipeTitle[position]);
+        return textView;
     }
 
-    public Integer[] popThumbs (Integer[] urls) {
-        System.arraycopy( urls, 0, mThumbIds, 0, urls.length );
-        return mThumbIds;
-    }
-    // references to our images
 
 }

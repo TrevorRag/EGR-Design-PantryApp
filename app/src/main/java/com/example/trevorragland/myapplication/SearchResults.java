@@ -48,23 +48,12 @@ public class SearchResults extends AppCompatActivity {
     String[] category;
     String[] subCategory;
     String[] starRating;
+    Bundle idBundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-
-        tvTestText = (TextView) findViewById(R.id.tvTestText);
-        GridView gridview = (GridView) findViewById(R.id.gvSearchGrid);
-        gridview.setAdapter(new ImageAdapter(this));
-
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                Toast.makeText(SearchResults.this, "" + position,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
 
         //toolbar stuff
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,9 +62,26 @@ public class SearchResults extends AppCompatActivity {
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        //string search result
         String searchQuery = getIntent().getStringExtra("query");
         getRecipeThumbInfo(searchQuery);
-        tvTestText.setText("Work in progress\n" + "But here are some recipe's that contain your search word:\n" + Arrays.toString(recipeTitle));
+
+        GridView gridview = (GridView) findViewById(R.id.gvSearchGrid);
+        final ImageAdapter check = new ImageAdapter(this);
+        check.setSearchInfo(recipeTitle, recipeID, imageUri, category, subCategory, starRating);
+        gridview.setAdapter(check);
+
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                String gotToID = check.getID(position);
+                idBundle.putString("ID",gotToID);
+                Intent recipeDisplayIntent = new Intent(SearchResults.this, RecipeDisplay.class);
+                recipeDisplayIntent.putExtras(idBundle);
+                startActivity(recipeDisplayIntent);
+                finish();
+            }
+        });
 
     }
 

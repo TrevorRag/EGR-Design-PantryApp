@@ -76,6 +76,5 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_weight="1" />
-<!--TODO: Add a hamburger -->
     </LinearLayout>
 </RelativeLayout>

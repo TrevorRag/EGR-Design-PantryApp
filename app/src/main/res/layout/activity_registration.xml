@@ -39,7 +39,7 @@
         android:background="@color/colorPrimaryDark"
         android:fontFamily="sans-serif"
         android:onClick="onCreateAccountPressed"
-        android:text="Register"
+        android:text="    Register     "
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="24sp" />
 

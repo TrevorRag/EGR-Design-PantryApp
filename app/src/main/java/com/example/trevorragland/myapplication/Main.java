@@ -86,7 +86,7 @@ public class Main extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(Main.this,"Our word : "+s,Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this,"Searching for: "+s,Toast.LENGTH_SHORT).show();
                 recipeSearch(s);
                 return true;
             }

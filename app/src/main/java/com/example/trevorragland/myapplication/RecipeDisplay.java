@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +31,10 @@ import java.util.Arrays;
 
 import self.philbrown.droidQuery.$;
 import self.philbrown.droidQuery.AjaxOptions;
+import self.philbrown.droidQuery.AjaxTask;
 import self.philbrown.droidQuery.Function;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by AD on 4/19/2017.
@@ -38,6 +42,7 @@ import self.philbrown.droidQuery.Function;
 
 public class RecipeDisplay extends AppCompatActivity {
     final String apiKey = Constants.BIGOVEN_API_KEY;
+    String recipeID = null;
     private FirebaseAuth mAuth;
     ImageView ivRecipeThumb;
     TextView tvRecipeName;
@@ -65,9 +70,8 @@ public class RecipeDisplay extends AppCompatActivity {
         tvPreparationList = (TextView) findViewById(R.id.tvPreparationList);
 
         //RecipeID
-        String[] idList = {"1917985","334","163933","741582","174337","172112"};
-        int randomNum = ThreadLocalRandom.current().nextInt(0, 6);
-        recipeFetch(idList[randomNum]);
+        recipeID = getIntent().getStringExtra("ID");
+        recipeFetch(recipeID);
     }
 
 
@@ -90,9 +94,15 @@ public class RecipeDisplay extends AppCompatActivity {
                     JSONObject obj = new JSONObject(pls);
 
                     //**************Picture Start**************
-                    String url = obj.getString("PhotoUrl");
-                    new DownloadImageTask((ImageView) findViewById(R.id.ivRecipeThumb))
-                            .execute(url);
+                    final String url = obj.getString("PhotoUrl");
+                    int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 256, getResources().getDisplayMetrics());
+                    $.with(ivRecipeThumb).image(url, px, px, new Function() {
+                        @Override
+                        public void invoke($ droidQuery, Object... params) {
+                            Log.e("Images", params[0].toString());
+                            new DownloadImageTask((ImageView) findViewById(R.id.ivRecipeThumb)).execute(url);
+                        }
+                    });
                     //**************Picture End****************
 
                     //**************Title Start****************
@@ -125,6 +135,7 @@ public class RecipeDisplay extends AppCompatActivity {
                         temp = temp.replaceAll(",","");
                         temp = temp.replaceAll("\\]","");
                         temp = temp.replaceAll("\\\\n","");
+                        temp = temp.replaceAll("\\\\","");
                         temp += "\r\n\r\n";
                         allIngredients += temp;
                     }

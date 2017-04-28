@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/ivRecipeThumb"
         android:layout_width="match_parent"
-        android:layout_height="136dp"
+        android:layout_height="150dp"
         app:srcCompat="@drawable/colors__" />
 
     <TextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ingredient List failed to load."
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
 
