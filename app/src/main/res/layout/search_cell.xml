@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutGridCell"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivThumbCell"
+        android:layout_width="256px"
+        android:layout_height="256px"
+        app:srcCompat="@drawable/colors__" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="256px"
+        android:orientation="vertical"
+        android:layout_marginBottom="5px">
+
+        <TextView
+            android:id="@+id/tvTitleCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvCatCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tvSubCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/tvRateCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textAlignment="textStart"
+            android:textSize="17sp"
+            android:paddingBottom="5dp" />
+    </LinearLayout>
+
+</LinearLayout>

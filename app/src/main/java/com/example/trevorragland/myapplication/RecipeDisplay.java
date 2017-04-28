@@ -100,7 +100,7 @@ public class RecipeDisplay extends AppCompatActivity {
                         @Override
                         public void invoke($ droidQuery, Object... params) {
                             Log.e("Images", params[0].toString());
-                            new DownloadImageTask((ImageView) findViewById(R.id.ivRecipeThumb)).execute(url);
+                            new DownloadImageTask(ivRecipeThumb).execute(url);
                         }
                     });
                     //**************Picture End****************

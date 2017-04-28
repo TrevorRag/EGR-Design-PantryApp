@@ -19,7 +19,7 @@
         android:id="@+id/tvRecipeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recipe Name"
+        android:text="Loading..."
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="24sp" />
@@ -50,7 +50,7 @@
                 android:id="@+id/tvIngredientList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ingredient List failed to load."
+                android:text="Loading..."
                 android:textColor="@android:color/black"
                 android:textSize="24sp" />
         </LinearLayout>
@@ -82,7 +82,7 @@
                 android:id="@+id/tvPreparationList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Preparation list failed to load."
+                android:text="Loading..."
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
         </LinearLayout>

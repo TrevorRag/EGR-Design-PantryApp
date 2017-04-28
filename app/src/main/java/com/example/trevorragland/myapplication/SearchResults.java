@@ -66,7 +66,7 @@ public class SearchResults extends AppCompatActivity {
         String searchQuery = getIntent().getStringExtra("query");
         getRecipeThumbInfo(searchQuery);
 
-        GridView gridview = (GridView) findViewById(R.id.gvSearchGrid);
+        GridView gridview = (GridView) findViewById(R.id.gvThumbnails);
         final ImageAdapter check = new ImageAdapter(this);
         check.setSearchInfo(recipeTitle, recipeID, imageUri, category, subCategory, starRating);
         gridview.setAdapter(check);
@@ -142,8 +142,11 @@ public class SearchResults extends AppCompatActivity {
             starRating = new String[obj.getJSONArray("Results").length()];
             for (int i = 0; i < obj.getJSONArray("Results").length(); i++) {
                 JSONObject ids = obj.getJSONArray("Results").getJSONObject(i);
-                if (ids.getString("StarRating") != null)
-                    starRating[i] = (ids.getString("StarRating"));
+                if (ids.getString("StarRating") != null) {
+                    String rate = (ids.getString("StarRating"));
+                    rate = rate.substring(0,Math.min(rate.length(), 3));
+                    starRating[i] = rate;
+                }
                 else
                     i = 50;
             }

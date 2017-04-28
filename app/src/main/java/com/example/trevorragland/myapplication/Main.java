@@ -48,6 +48,7 @@ public class Main extends AppCompatActivity {
     private String googleUser;
     URL pic = null;
     private String apiKey = Constants.BIGOVEN_API_KEY;
+    Bundle idBundle = new Bundle();
 
     private static final String LOG_TAG = Main.class.getSimpleName();
 
@@ -125,8 +126,10 @@ public class Main extends AppCompatActivity {
     }
 
     public void onMyRecipePressed(View view) {
-        Intent startRecipeDisplay = new Intent(Main.this, RecipeDisplay.class);
-        startActivity(startRecipeDisplay);
+        idBundle.putString("ID","163126");
+        Intent recipeDisplayIntent = new Intent(Main.this, RecipeDisplay.class);
+        recipeDisplayIntent.putExtras(idBundle);
+        startActivity(recipeDisplayIntent);
     }
 
     public void onAddRecipePressed(View view) {

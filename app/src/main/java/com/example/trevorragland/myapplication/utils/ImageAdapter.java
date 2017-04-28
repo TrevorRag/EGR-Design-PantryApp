@@ -1,6 +1,11 @@
 package com.example.trevorragland.myapplication.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.trevorragland.myapplication.R;
+import com.example.trevorragland.myapplication.RecipeDisplay;
 
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**
@@ -18,7 +25,6 @@ import java.util.Arrays;
 
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private Context aContext;
     // references to our images
     private String[] recipeTitle;
     private String[] recipeID;
@@ -64,24 +70,45 @@ public class ImageAdapter extends BaseAdapter {
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView textView;
-        TextView categoryView;
         if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            textView = new TextView(mContext);
-            categoryView = new TextView(mContext);
-            textView.setLayoutParams(new GridView.LayoutParams(500,256));
-            textView.setPadding(8, 8, 8, 8);
-            categoryView.setLayoutParams(new GridView.LayoutParams(500,256));
-            categoryView.setPadding(8, 8, 8, 8);
-        } else {
-            textView = (TextView) convertView;
-            categoryView = (TextView) convertView;
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.search_cell,parent,false);
         }
-        categoryView.setText(rCategory[position]);
-        textView.setText(recipeTitle[position]);
-        return textView;
+        ImageView img = (ImageView) convertView.findViewById(R.id.ivThumbCell);
+        TextView title= (TextView) convertView.findViewById(R.id.tvTitleCell);
+        TextView category= (TextView) convertView.findViewById(R.id.tvCatCell);
+        TextView subCategory= (TextView) convertView.findViewById(R.id.tvSubCell);
+        TextView rating= (TextView) convertView.findViewById(R.id.tvRateCell);
+
+        title.setText(recipeTitle[position]);
+        category.setText(rCategory[position]);
+        subCategory.setText(rSubCategory[position]);
+        rating.setText("   Rating: " + starRating[position]);
+        new DownloadImageTask(img).execute(imageUri[position]);
+        return convertView;
     }
 
+    public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
 }
