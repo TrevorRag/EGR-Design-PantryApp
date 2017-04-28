@@ -39,7 +39,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:10.2.1'
     testCompile 'junit:junit:4.12'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile files('H:/Users/AD/Documents/GitHub/EGR-Design-PantryApp/libs/jCSS-Parser-0.0.2-sources.jar')
+    compile files('/Users/T-Raww/AndroidStudioProjects/AndroidApp/libs/jCSS-Parser-0.0.2-sources.jar')
     compile 'com.android.support:gridlayout-v7:25.3.1'
 }
 

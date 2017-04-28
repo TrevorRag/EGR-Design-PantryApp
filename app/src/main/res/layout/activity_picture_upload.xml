@@ -71,12 +71,15 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/imUpload"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="55dp"
-        android:text="Button"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Inverse"
-        tools:text="Upload Image"
+        android:background="@color/colorPrimaryDark"
+        android:fontFamily="sans-serif"
         android:onClick="goToRegistration"
-        android:layout_below="@+id/imUpload"/>
+        android:text="Button"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="24sp"
+        tools:text="Upload Image" />
 
 </RelativeLayout>

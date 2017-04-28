@@ -30,13 +30,18 @@
         android:hint="Password" />
 
     <Button
-        android:text="Register"
-        android:onClick="onCreateAccountPressed"
+        android:id="@+id/bRegister"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:id="@+id/bRegister" />
+        android:background="@color/colorPrimaryDark"
+        android:fontFamily="sans-serif"
+        android:onClick="onCreateAccountPressed"
+        android:text="Register"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="24sp" />
 
     <EditText
         android:layout_width="match_parent"

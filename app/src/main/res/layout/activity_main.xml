@@ -27,22 +27,28 @@
 
     <Button
         android:id="@+id/MyRecipes"
-        android:layout_marginTop="30dp"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="My Recipes"
         android:layout_gravity="center"
         android:layout_marginBottom="15dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorPrimaryDark"
         android:onClick="onMyRecipePressed"
-        />
+        android:text="My Recipes"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/AddRecipe"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Add Recipe"
+        android:background="@color/colorPrimaryDark"
         android:onClick="onAddRecipePressed"
-        />
+        android:text="Add Recipe"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="24sp" />
 
 </LinearLayout>
