@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,11 +18,17 @@ import android.view.View;
 import com.example.trevorragland.myapplication.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -42,13 +49,19 @@ public class Main extends AppCompatActivity {
     SearchView svSearch;
     private StorageReference storage = FirebaseStorage.getInstance().getReference();
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference recipeLocation = database.getReference().child("recipes");
     private String email;
     private String profilePic;
     private String name;
     private String googleUser;
+    private  String pls;
     URL pic = null;
     private String apiKey = Constants.BIGOVEN_API_KEY;
     Bundle idBundle = new Bundle();
+    String recipeID = null;
+    private int web = 174501;
+    private int rip = 175000;
 
     private static final String LOG_TAG = Main.class.getSimpleName();
 
@@ -77,17 +90,18 @@ public class Main extends AppCompatActivity {
         /*                                                                       */
 
         //sets the Google URL to imageview
-        if (isValidUrl(pic, profilePic)) {
-            new DownloadImageTask((ImageView) findViewById(R.id.ivUserInformation))
-                    .execute(profilePic);
-        }
-        //elseif get pic from database.
+        Picasso.with(Main.this)
+                .load(profilePic)
+                .resize(512, 512)
+                .centerCrop()
+                .into(ivUserInformation);
 
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(Main.this,"Searching for: "+s,Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this,"Searching for: "+ s,Toast.LENGTH_SHORT).show();
+                s = s.replaceAll(" ","+");
                 recipeSearch(s);
                 return true;
             }
@@ -126,10 +140,14 @@ public class Main extends AppCompatActivity {
     }
 
     public void onMyRecipePressed(View view) {
-        idBundle.putString("ID","163126");
-        Intent recipeDisplayIntent = new Intent(Main.this, RecipeDisplay.class);
-        recipeDisplayIntent.putExtras(idBundle);
-        startActivity(recipeDisplayIntent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+        builder.setMessage("Feel free to restart.").setTitle("Finished");
+        AlertDialog dialog = builder.create();
+        for (int counter = web; counter <= rip; counter++) {
+            createDatabaseRecipe(Integer.toString(counter));
+        }
+        web += 500;
+        rip += 500;
     }
 
     public void onAddRecipePressed(View view) {
@@ -155,32 +173,6 @@ public class Main extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    //Turns the specified URL (Google profile pic) into a bitmap
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 
     //Checks to make sure the new URL is valid.
@@ -255,6 +247,43 @@ public class Main extends AppCompatActivity {
         System.exit(0);
         //********************
     }
+
+    private  void createDatabaseRecipe(String recipeId) {
+        recipeID = recipeId;
+        JSONObject obj = new JSONObject();
+
+        final String recipeUrl = "https://api2.bigoven.com/recipe/"
+                + recipeID
+                + "?api_key=" + apiKey;
+
+        $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(this).success(new Function() {
+            @Override
+            public void invoke($ droidQuery, Object... params) {
+                //get the title
+                pls = params[0].toString();
+                try {
+                    //gets the JSON output from the website
+                    JSONObject obj = new JSONObject(pls);
+                    String temp = obj.getString("RecipeID");
+                    temp = temp.replaceAll("\"","");
+                    recipeLocation.child(temp).setValue(pls);
+                }
+                catch  (JSONException e) {
+                    System.err.println("Caught JSONException: " + e.getMessage());
+                }
+
+            }
+        }).error(new Function() {
+            @Override
+            public void invoke($ droidQuery, Object... params) {
+                int statusCode = (Integer) params[1];
+                String error = (String) params[2];
+                Log.e("Ajax", statusCode + " " + error);
+            }
+        }));
+
+    }
+
 
     //Todo grab profile pic from database
     /*public void getFile(Uri profilePic) {

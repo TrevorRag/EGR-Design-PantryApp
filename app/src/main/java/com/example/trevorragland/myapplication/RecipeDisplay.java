@@ -19,6 +19,11 @@ import android.widget.TextView;
 
 import com.example.trevorragland.myapplication.utils.Constants;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +55,8 @@ public class RecipeDisplay extends AppCompatActivity {
     TextView tvPreparationList;
     private String[] ingredientList;
     String allIngredients = "";
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final String LOG_TAG = RecipeDisplay.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +81,90 @@ public class RecipeDisplay extends AppCompatActivity {
         recipeFetch(recipeID);
     }
 
+    public void recipeFetch(final String recipeId) {
 
-    public void recipeFetch(String recipeId) {
+        DatabaseReference myRef = database.getReference().child("recipes").child(recipeId);
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
 
+                try {
+                    //gets the JSON output from the website
+                    JSONObject obj = new JSONObject(value);
+
+                    //**************Picture Start**************
+                    final String url = obj.getString("PhotoUrl");
+                    int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 256, getResources().getDisplayMetrics());
+                    $.with(ivRecipeThumb).image(url, px, px, new Function() {
+                        @Override
+                        public void invoke($ droidQuery, Object... params) {
+                            Log.e("Images", params[0].toString());
+                            new DownloadImageTask(ivRecipeThumb).execute(url);
+                        }
+                    });
+                    //**************Picture End****************
+
+                    //**************Title Start****************
+                    String title = obj.getString("Title");
+                    $.with(tvRecipeName).val(title);
+                    //**************Title End******************
+
+                    //**************Ingredients Start**********
+                    JSONArray tempArray = new JSONArray();
+                    JSONArray fini = new JSONArray();
+
+                    //siphons the extra information out of the ingredients array
+                    for (int i = 0; i < 7; i++) {
+                        JSONObject ingredients = obj.getJSONArray("Ingredients").getJSONObject(i);
+                        tempArray.put(ingredients.getString("Name").trim() + ": ");
+                        tempArray.put(ingredients.getString("Quantity").trim());
+                        tempArray.put(" " + ingredients.getString("Unit").trim());
+                        if (ingredients.getString("PreparationNotes").trim() != null)
+                            tempArray.put(" " + ingredients.getString("PreparationNotes").trim() + "\n");
+                        fini.put(tempArray);
+                        fini.remove(1);
+                        String getIngredient = fini.getString(0);
+                        ingredientList = getIngredient.split("\\\\n\",\"");
+                    }
+
+                    //turns the array into an easy to read string
+                    for (int i = 0; i < ingredientList.length; i++) {
+                        String temp = ingredientList[i];
+                        temp = temp.replaceAll("\\[","");
+                        temp = temp.replaceAll("\"","");
+                        temp = temp.replaceAll(",","");
+                        temp = temp.replaceAll("\\]","");
+                        temp = temp.replaceAll("\\\\n","");
+                        temp = temp.replaceAll("\\\\","");
+                        temp += "\r\n\r\n";
+                        allIngredients += temp;
+                    }
+                    $.with(tvIngredientList).val(allIngredients);
+                    //**************Ingredients End************
+
+                    //**************Instructions Start*********
+                    String prep = obj.getString("Instructions");
+                    $.with(tvPreparationList).val(prep);
+                    //**************Instructions End***********
+                }
+                catch (JSONException e) {
+                    System.err.println("Caught JSONException: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(LOG_TAG, "Failed to read value.", error.toException());
+            }
+        });
+        /************************BIGOVEN RETRIEVAL***********************************
         JSONObject obj = new JSONObject();
+
 
         final String recipeUrl = "https://api2.bigoven.com/recipe/"
                 + recipeId
@@ -160,6 +247,7 @@ public class RecipeDisplay extends AppCompatActivity {
                 Log.e("Ajax", statusCode + " " + error);
             }
         }));
+         ******************************************************************************************/
     }
 
     @Override

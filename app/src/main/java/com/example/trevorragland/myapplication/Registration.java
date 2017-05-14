@@ -179,4 +179,5 @@ public class Registration extends AppCompatActivity {
         User currentUser = new User(mUserName, mUserEmail, joined, mPhone, null);
         userLocation.child(encodeEmail(mUserEmail)).setValue(currentUser);
     }
+
 }

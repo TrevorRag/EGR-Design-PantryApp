@@ -13,8 +13,10 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.trevorragland.myapplication.Main;
 import com.example.trevorragland.myapplication.R;
 import com.example.trevorragland.myapplication.RecipeDisplay;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -83,32 +85,11 @@ public class ImageAdapter extends BaseAdapter {
         category.setText(rCategory[position]);
         subCategory.setText(rSubCategory[position]);
         rating.setText("   Rating: " + starRating[position]);
-        new DownloadImageTask(img).execute(imageUri[position]);
+        Picasso.with(mContext)
+                .load(imageUri[position])
+                .resize(512, 512)
+                .centerCrop()
+                .into(img);
         return convertView;
-    }
-
-    public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 }
