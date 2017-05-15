@@ -60,8 +60,8 @@ public class Main extends AppCompatActivity {
     private String apiKey = Constants.BIGOVEN_API_KEY;
     Bundle idBundle = new Bundle();
     String recipeID = null;
-    private int web = 174501;
-    private int rip = 175000;
+    private int web = 187443;
+    private int rip = 187500;
 
     private static final String LOG_TAG = Main.class.getSimpleName();
 
@@ -146,7 +146,7 @@ public class Main extends AppCompatActivity {
         for (int counter = web; counter <= rip; counter++) {
             createDatabaseRecipe(Integer.toString(counter));
         }
-        web += 500;
+        web = rip + 1;
         rip += 500;
     }
 
