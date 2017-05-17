@@ -1,5 +1,6 @@
 package com.example.trevorragland.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,8 +61,8 @@ public class Main extends AppCompatActivity {
     private String apiKey = Constants.BIGOVEN_API_KEY;
     Bundle idBundle = new Bundle();
     String recipeID = null;
-    private int web = 187443;
-    private int rip = 187500;
+    private int web = 499640;
+    private int rip = 500000;
 
     private static final String LOG_TAG = Main.class.getSimpleName();
 
@@ -144,7 +145,7 @@ public class Main extends AppCompatActivity {
         builder.setMessage("Feel free to restart.").setTitle("Finished");
         AlertDialog dialog = builder.create();
         for (int counter = web; counter <= rip; counter++) {
-            createDatabaseRecipe(Integer.toString(counter));
+            createDatabaseRecipe(Integer.toString(counter),this);
         }
         web = rip + 1;
         rip += 500;
@@ -248,15 +249,14 @@ public class Main extends AppCompatActivity {
         //********************
     }
 
-    private  void createDatabaseRecipe(String recipeId) {
+    public void createDatabaseRecipe(String recipeId, Context hope) {
         recipeID = recipeId;
-        JSONObject obj = new JSONObject();
-
+        Context thisOne = hope;
         final String recipeUrl = "https://api2.bigoven.com/recipe/"
                 + recipeID
                 + "?api_key=" + apiKey;
 
-        $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(this).success(new Function() {
+        $.ajax(new AjaxOptions().url(recipeUrl).type("GET").dataType("json").context(thisOne).success(new Function() {
             @Override
             public void invoke($ droidQuery, Object... params) {
                 //get the title

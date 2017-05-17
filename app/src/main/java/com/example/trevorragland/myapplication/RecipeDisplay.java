@@ -156,6 +156,8 @@ public class RecipeDisplay extends AppCompatActivity {
                         //**************Instructions End***********
                     } catch (JSONException e) {
                         System.err.println("Caught JSONException: " + e.getMessage());
+                        finish();
+                        $.with(RecipeDisplay.this).toast("Problem loading recipe.", Toast.LENGTH_LONG);
                     }
                 } else {
                     finish();

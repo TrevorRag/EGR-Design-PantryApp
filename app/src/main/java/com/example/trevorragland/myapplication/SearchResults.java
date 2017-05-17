@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +22,11 @@ import com.example.trevorragland.myapplication.POJO.Recipe;
 import com.example.trevorragland.myapplication.utils.ImageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +43,6 @@ import static com.example.trevorragland.myapplication.Login.encodeEmail;
  */
 
 public class SearchResults extends AppCompatActivity {
-    TextView tvTestText;
     private FirebaseAuth mAuth;
     int hitCount = 0;
     String[] recipeTitle;
@@ -48,6 +51,8 @@ public class SearchResults extends AppCompatActivity {
     String[] category;
     String[] subCategory;
     String[] starRating;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static final String LOG_TAG = SearchResults.class.getSimpleName();
     Bundle idBundle = new Bundle();
 
     @Override
@@ -74,12 +79,34 @@ public class SearchResults extends AppCompatActivity {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
-                String gotToID = check.getID(position);
-                idBundle.putString("ID",gotToID);
-                Intent recipeDisplayIntent = new Intent(SearchResults.this, RecipeDisplay.class);
-                recipeDisplayIntent.putExtras(idBundle);
-                startActivity(recipeDisplayIntent);
-                finish();
+                final String gotToID = check.getID(position);
+                DatabaseReference myRef = database.getReference().child("recipes").child(gotToID);
+                myRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        String value = dataSnapshot.getValue(String.class);
+                        if (value != null) {
+                            idBundle.putString("ID",gotToID);
+                            Intent recipeDisplayIntent = new Intent(SearchResults.this, RecipeDisplay.class);
+                            recipeDisplayIntent.putExtras(idBundle);
+                            startActivity(recipeDisplayIntent);
+                            System.out.println("I did this");
+                        }
+                        else {
+                            Main grab = new Main();
+                            grab.createDatabaseRecipe(gotToID,SearchResults.this);
+                            System.out.println("ID is this: o" + gotToID + "o");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        // Failed to read value
+                        Log.w(LOG_TAG, "Failed to read value.", error.toException());
+                    }
+                });
             }
         });
 
@@ -93,7 +120,6 @@ public class SearchResults extends AppCompatActivity {
 
             //get the result count
             hitCount = obj.getInt("ResultCount");
-
 
             JSONArray tempArray = new JSONArray();
             JSONArray fini = new JSONArray();
